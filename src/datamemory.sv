@@ -17,8 +17,7 @@ module datamemory #(
 
     always_ff @(posedge clk)
         begin
-            if (write_enable == 1'b1) 
-                data_mem[{address}[MEMORY_SIZE-1:0]] <= write_data;
+            if (write_enable == 1'b1) data_mem[{address}[MEMORY_SIZE-1:0]] <= write_data;
         end
 
 endmodule
