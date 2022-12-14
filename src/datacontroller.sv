@@ -33,7 +33,7 @@ module datacontroller #(
                 read_data = mem_data_out; //lw
                 write_data = mem_data_in; //sw
             end
-            {3'b100}: read_data = {{24{1'b0}}, tmpb_out}; //lbu
+            {3'b100}: read_data = {{24{1'b0}},tmpb_out}; //lbu
             {3'b101}: read_data = {{16{1'b0}},tmph_out}; //lhu
             default: begin
                 write_data = 32'b0;

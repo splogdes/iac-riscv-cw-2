@@ -15,9 +15,7 @@ int main (int argc, char **argv, char **env) {
 
     top->clk = 1;
     top->address = 0;
-    top->write_data = 2882400152;
     top->write_enable = 1;
-    top->DATAMEMControl = 0;
     int count = 0;
     int clk;
     int i;
@@ -28,22 +26,6 @@ int main (int argc, char **argv, char **env) {
             top->clk = !top->clk;
             top->eval();
         }
-        top->DATAMEMControl = i/100;
-        top->address = count;
-        top->write_enable = (i/150)<130 && i%3 == 1;
-        if(i%6==0){ 
-            count++;
-        }
-        // if (i == 40) {
-        //     top->write_enable = 1;
-        //     count = 0;
-        // } else if (i == 60) {
-        //     top->write_enable = 0;
-        //     count = 0;
-        // } else if (i == 70) {
-        //     top->write_enable = 1;
-        //     count = 0;
-        // }
         top->eval();
         if (Verilated::gotFinish()) exit(0);
     }
