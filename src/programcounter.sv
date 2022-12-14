@@ -20,7 +20,7 @@ module programcounter #(
 
     logic [DATA_WIDTH-1:0] pc_e;
 
-    cdl #(2) cdl_pc_d_e (
+    cdl #(DATA_WIDTH) cdl_pc_d_e (
         .clk_i(clk),
         .signal_i(pc_d),
         .delayed_o(pc_e)

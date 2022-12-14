@@ -93,7 +93,13 @@ logic [BITNESS-1:0] result;
 logic [BITNESS-1:0] a0;
 /* verilator lint_on UNUSED */
 
-logic [BITNESS-1:0] immext;
+logic [BITNESS-1:0] immext_d, immext_e;
+
+cdl #(BITNESS) cdl_immext_d_e (
+    .clk_i(clk_i),
+    .signal_i(immext_d),
+    .delayed_o(immext_e)
+);
 
 logic [2:0] alu_ctrl_d;
 
@@ -236,7 +242,7 @@ always_comb begin
     data_out_o = a0[7:0];
 
     if (alusrc_e == 1'b1)
-        alu_src_b = immext;
+        alu_src_b = immext_e;
     else if (alusrc_e == 1'b0)
         alu_src_b = rd2_e;
     //else if (alusrc_e == 2'b10)
@@ -251,7 +257,7 @@ always_comb begin
     else if (resultsrc_w == 2'b10)
         result = pcplus4_w; //JAL/JALR return storage
     else if (resultsrc_w == 2'b11)
-        result = immext;
+        result = immext_e;
     else
         result = 'b1111111;//Shouldn't happen
 
@@ -260,7 +266,7 @@ end;
 /* verilator lint_off PINMISSING */
 // need this for unused count pin
 programcounter #() programcounter (
-    .ImmOp(immext),
+    .ImmOp(immext_e),
     .clk(clk_i),
     .PCsrc(pcsrc),
     .rst(rst_i),
@@ -273,7 +279,7 @@ programcounter #() programcounter (
 
 instructionmemory #(BITNESS, INSTR_WIDTH, "instructionmemory.tmp.mem") instructionmemory (
     .addr_i(pc),
-    .dout_o(instr)
+    .dout_o(instr_read)
 );
 
 alu #(BITNESS,3) alu (
@@ -287,8 +293,8 @@ alu #(BITNESS,3) alu (
 regfile #(BITNESS, REG_ADDR_WIDTH) registerfile(
     .clk(clk_i),
     .we3(regwrite_w),
-    .a1(instr[19:15]),
-    .a2(instr[24:20]),
+    .a1(instr_d[19:15]),
+    .a2(instr_d[24:20]),
     .a3(rd_w),
     .wd3(result),
     .rd1(rd1_d),
@@ -321,9 +327,9 @@ controlUnit #() controlunit(
 );
 
 signextend #() signextend(
-    .toextend_i(instr[31:7]),
+    .toextend_i(instr_d[31:7]),
     .immsrc_i(immsrc),
-    .immop_o(immext)
+    .immop_o(immext_d)
 );
 
 
