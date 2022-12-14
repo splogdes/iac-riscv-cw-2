@@ -1,25 +1,36 @@
 module controlUnit (
 //Inputs
+    input logic clk_i,
     input logic zero,
     input logic [6:0] op,
     input logic [2:0] funct3,
     input logic funct7_5,
 //Outputs
-    output logic [1:0] PCSrc, //Select PC:=PC+4 (Sel0) or PC:=PC+ImmOp (Sel1) or PC:=ImmOp (Sel2)
+    //output logic [1:0] PCSrc, //Select PC:=PC+4 (Sel0) or PC:=PC+ImmOp (Sel1) or PC:=ImmOp (Sel2)
+
     output logic [1:0] ResultSrc,
     output logic MemWrite,
     output logic [2:0] ALUControl,
     output logic         ALUSrc,
     output logic [2:0] ImmSrc,
+    output logic [1:0] PCSrc,
     output logic RegWrite
 );
-wire [1:0] BranchWire;
+wire [1:0] BranchWire_d;
+wire [1:0] BranchWire_e;
+
+cdl #(2) cdl_branchwire (
+    .clk_i(clk_i),
+    .signal_i(BranchWire_d),
+    .delayed_o(BranchWire_e)
+);
+
 wire [1:0] ALUOpWire;
 always_comb
     begin
-    if (((BranchWire==2'b01) && (zero==1'b1))||(BranchWire == 2'b10))
+    if (((BranchWire_e==2'b01) && (zero==1'b1))||(BranchWire_e == 2'b10))
         assign PCSrc = 2'b01;
-    else if (BranchWire == 2'b11)
+    else if (BranchWire_e == 2'b11)
         assign PCSrc = 2'b10;
     else
         assign PCSrc = 2'b00;
@@ -30,7 +41,7 @@ mainDecoder mainDecoder(
 //Inputs
     .op (op),
 //Outputs
-    .Branch (BranchWire),
+    .Branch (BranchWire_d),
     .ImmSrc (ImmSrc),
     .ALUSrc (ALUSrc),
     .ResultSrc (ResultSrc),
