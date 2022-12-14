@@ -1,8 +1,8 @@
 module datamemory #(
     parameter   DATA_WIDTH = 32, 
-                ADDRESS_WIDTH = 27,
+                ADDRESS_WIDTH = 30,
                 MEMORY_SIZE = 16,
-                BlOCK_SIZE = 3,
+                BlOCK_SIZE = 2,
                 SOURCE_FILE = "datamemory.mem"
 
 )(
@@ -12,17 +12,18 @@ module datamemory #(
     input logic                         clk,
     output logic    [S-1:0]             read_data
 );
-    parameter S = DATA_WIDTH*BlOCK_SIZE;
-    parameter A_SIZE = MEMORY_SIZE - BlOCK_SIZE;
+    parameter S = DATA_WIDTH*(2**BlOCK_SIZE);
     logic [DATA_WIDTH-1:0] data_mem [2**MEMORY_SIZE-1:0];
-    logic [S-1:0] tmp_data;
+    logic [S+DATA_WIDTH-1:0] tmp_data;
 
     always_comb begin 
         tmp_data = 0;
-        for(int i=0;i<BlOCK_SIZE;i++) begin
-            tmp_data = {{tmp_data}[S-1:DATA_WIDTH],data_mem[{address[A_SIZE-1:0],{i}[BlOCK_SIZE-1:0]}]}<<DATA_WIDTH;
+        for(int i=2**BlOCK_SIZE-1;i>=0;i--) begin
+            tmp_data = {{tmp_data}[S+DATA_WIDTH-1:DATA_WIDTH],data_mem[{address[MEMORY_SIZE-1:BlOCK_SIZE],{i}[BlOCK_SIZE-1:0]}]}<<DATA_WIDTH;
+            // $display("tmpdata=%0h",tmp_data);
         end
-        read_data = tmp_data;
+        read_data = {tmp_data}[S+DATA_WIDTH-1:DATA_WIDTH];
+        // $display("read_data=%0h address=%0h",read_data,address);
     end
 
     initial begin

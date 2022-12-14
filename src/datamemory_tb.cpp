@@ -14,11 +14,12 @@ int main (int argc, char **argv, char **env) {
     tfp->open ("datamemory.vcd");
 
     top->clk = 1;
-    top->address = 0;
-    top->write_enable = 1;
+    top->address = 6;
+    top->write_enable = 0;
+    top->write_data = 2863311530;
     int count = 0;
     int clk;
-    int i;
+    int i; 
 
     for (i=0; i<100;i++) {
         for (clk=0; clk<2; clk++) {
@@ -26,6 +27,7 @@ int main (int argc, char **argv, char **env) {
             top->clk = !top->clk;
             top->eval();
         }
+        top->write_enable = i==10;
         top->eval();
         if (Verilated::gotFinish()) exit(0);
     }
