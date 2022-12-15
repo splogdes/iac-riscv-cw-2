@@ -1,4 +1,33 @@
 # Who has done what
+
+| Module | Ollie | Patrick | Jackson | Noor |
+| - | - | - | - | - |
+|`src/alu.sv` | M 
+|`src/alu_tb.cpp`|M
+|`src/aluDecoder.sv`|
+|`src/blockwrite.sv`|M
+|`src/cache.sv`|M
+|`src/controlUnit.sv`|
+|`src/controlUnit_tb.cpp`|
+|`src/datacontroller.sv`|M
+|`src/datamemory.sv`|H
+|`src/instructionmemory.sv`|
+|`src/instructionmemory_tb.cpp`|
+|`src/mainDecoder.sv`|
+|`src/memoryunit.sv`|M
+|`src/programcounter.sv`|
+|`src/regfile.sv`|M
+|`src/regfile_tb.cpp`|M
+|`src/riscv.sv`|
+|`src/riscv_tb.cpp`|
+|`src/signextend.sv`|
+|`src/signextend_tb.cpp`|
+
+|Key|
+|-|
+|M = Main Contributer|
+|H = Also Helped|
+
 ## `/src/lib/`
 ### `testutils.h`
 #### Patrick Beart:
@@ -102,7 +131,7 @@ dec 14: Created `memoryunit.sv` to separate out the different components of the 
 dec 14: Created `datacontroller.sv` from `datamemory.sv` this controls the inputs and outputs to `datamemory.sv` to make the memory byte and half addressable.
 dec 15: Simplified `datacontroller.sv` using packed arrays
 
-### Branch `cache-and-pipelining` 
+## Branch `cache-and-pipelining` 
 
 ### `cache.sv` and `blockwrite.sv`
 
