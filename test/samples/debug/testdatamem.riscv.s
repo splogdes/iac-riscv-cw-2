@@ -26,6 +26,8 @@ lh a0, 0(s0)
 lb a0, 2(s0)
 lbu a0, 1(s0)
 addi t1, zero, -0x1
+addi s1, zero, 0x420
+lw s1, 0(s1)
 addi s0, zero, 0x20
 lw a0, 0(s0)
 li a0, -0x11111112

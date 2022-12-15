@@ -2,7 +2,7 @@ module memoryunit #(
     parameter   
     DATA_WIDTH = 32, 
     ADDRESS_WIDTH = 32, 
-    MEMORY_SIZE = 4, 
+    MEMORY_SIZE = 14, 
     SOURCE_FILE = "datamemory.mem",
     CACHE_SIZE = 3,
     BLOCK_SIZE = 2
