@@ -8,7 +8,8 @@ module mainDecoder (
     output logic     [1:0]      ResultSrc, //Result source from ALU result (Sel0) or Data Memory (Sel1) or (PC+4) (SEL2)
     output logic                RegWrite, //Writing to register? e.g. Load word
     output logic                MemWrite,//Writing to memory? e.g. Store word
-    output logic     [1:0]      ALUOp      
+    output logic     [1:0]      ALUOp,
+    output logic                read_en //if the cache is being used or not     
 ); 
 
 
@@ -22,6 +23,7 @@ module mainDecoder (
                         MemWrite = 1'b0;
                         ImmSrc = 3'b000; //xx
                         Branch = 2'b00;
+                        read_en = 1'b0;
                         end
             7'b1100011 : begin //B-type
                         ALUOp =  2'b01;
@@ -31,6 +33,7 @@ module mainDecoder (
                         MemWrite = 1'b0;
                         ImmSrc = 3'b010;
                         Branch = 2'b01;
+                        read_en = 1'b0;
                         end
             7'b0010011 : begin //I-type
                         ALUOp =  2'b00;
@@ -40,6 +43,7 @@ module mainDecoder (
                         MemWrite = 1'b0;
                         ImmSrc = 3'b000;
                         Branch = 2'b00;                               
+                        read_en = 1'b0;
                         end
             7'b0000011 : begin //load instructions
                         ALUOp =  2'b11;
@@ -49,6 +53,7 @@ module mainDecoder (
                         MemWrite = 1'b0;
                         ImmSrc = 3'b000;
                         Branch = 2'b00;                               
+                        read_en = 1'b1;
                         end
             7'b0100011 : begin //Store instructions
                         ALUOp =  2'b11;
@@ -58,6 +63,7 @@ module mainDecoder (
                         MemWrite = 1'b1;
                         ImmSrc = 3'b001;
                         Branch = 2'b00;               
+                        read_en = 1'b0;
                         end
             7'b1101111 : begin //JAL
                         ALUOp =  2'b00; //dont care 
@@ -67,6 +73,7 @@ module mainDecoder (
                         MemWrite = 1'b0;
                         ImmSrc = 3'b011; //Need Imm20 for jump address
                         Branch = 2'b10;               
+                        read_en = 1'b0;
                         end
             7'b0110111 : begin //lui
                         ALUOp =  2'b00;
@@ -76,6 +83,7 @@ module mainDecoder (
                         MemWrite = 1'b0;
                         ImmSrc = 3'b100;
                         Branch = 2'b00;               
+                        read_en = 1'b0;
                         end
             7'b1100111 : begin //JALR
                         ALUOp =  2'b11; //set to get ALU to ADD (PC+RS1+IMMOP)
@@ -85,7 +93,8 @@ module mainDecoder (
                         MemWrite = 1'b0;
                         ImmSrc = 3'b000; 
                         Branch = 2'b11;
-                        end    
+                        read_en = 1'b0;
+                        end 
             default : begin
                         ALUOp =  2'b00;
                         ALUSrc = 1'b0;
@@ -94,6 +103,7 @@ module mainDecoder (
                         MemWrite = 1'b0;
                         ImmSrc = 3'b000; 
                         Branch = 2'b00;               
+                        read_en = 1'b0;
                         end
         endcase
     end 

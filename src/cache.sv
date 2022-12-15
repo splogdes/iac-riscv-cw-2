@@ -4,7 +4,7 @@ module cache #(
     input logic [ADDRESS_WIDTH-1:0] address,
     input logic [DATA_WIDTH-1:0] d_in,
     input logic [JUST_DATA-1:0] mem_data_in,
-    input logic clk, write_enable,
+    input logic clk, write_enable, read_en,
     output logic [DATA_WIDTH-1:0] d_out,
     output logic [ADDRESS_WIDTH-1:0] mem_address
 );
@@ -21,7 +21,7 @@ logic [CACHE_SIZE-BLOCK_SIZE-1:0] set = address[CACHE_SIZE-1:BLOCK_SIZE]; //Whic
 
 logic [BLOCK_SIZE-1:0] way = address[BLOCK_SIZE-1:0]; //Which Block
 
-logic [JUST_DATA-1:0] block ,read_in ,write_data;
+logic [JUST_DATA-1:0] block,write_data;
 
 logic hit;
 
@@ -31,22 +31,24 @@ always_comb begin
     hit = (cache_mem[set][V]!=0'b0)&&(cache_mem[set][V-1:V-TAG_SIZE] == tag);
     mem_address = 0;
     block = 0;
-    read_in = 0;
-    if(write_enable) begin
-        if(hit) block = cache_mem[set][JUST_DATA-1:0];
-        else block = mem_data_in;
-    end
-    else begin
-        if(hit) read_in = cache_mem[set][JUST_DATA-1:0];
-        else begin
-            mem_address = address;
-            read_in = mem_data_in;
+        if(write_enable) begin
+            if(hit) block = cache_mem[set][JUST_DATA-1:0];
+            else begin
+                mem_address = address;
+                block = mem_data_in;
+            end
+        end
+        else if(read_en)begin
+            if(hit) block = cache_mem[set][JUST_DATA-1:0];
+            else begin
+                mem_address = address;
+                block = mem_data_in;
+            end
         end
     end
-end
 
 blockread #(DATA_WIDTH,BLOCK_SIZE) read1(
-    .block(read_in),
+    .block(block),
     .way(way),
     .d_out(d_out)
 );
@@ -60,7 +62,7 @@ blockwrite #(DATA_WIDTH,BLOCK_SIZE) write1(
 
 always_ff @(posedge clk) begin
     if(write_enable) cache_mem[set] <= {1'b1,tag,write_data};
-    else if(!hit) cache_mem[set] <= {1'b1,tag,mem_data_in};
+    else if((!hit)&&read_en) cache_mem[set] <= {1'b1,tag,mem_data_in};
 end
     
 endmodule

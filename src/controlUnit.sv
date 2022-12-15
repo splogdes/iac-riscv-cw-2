@@ -11,7 +11,8 @@ module controlUnit (
     output logic [3:0] ALUControl,
     output logic ALUSrc,
     output logic [2:0] ImmSrc,
-    output logic RegWrite
+    output logic RegWrite,
+    output logic read_en    
 );
 wire [1:0] BranchWire;
 wire [1:0] ALUOpWire;
@@ -36,7 +37,8 @@ mainDecoder mainDecoder(
     .ResultSrc (ResultSrc),
     .RegWrite (RegWrite),
     .MemWrite (MemWrite),
-    .ALUOp (ALUOpWire)
+    .ALUOp (ALUOpWire),
+    .read_en(read_en)
 
 );
 

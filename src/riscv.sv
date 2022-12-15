@@ -45,6 +45,8 @@ logic [1:0] resultsrc;
 
 logic memwrite;
 
+logic read_en;
+
 logic [BITNESS-1:0] readdata;
 
 wire  instr_funct7_5  = instr[30];
@@ -126,7 +128,8 @@ memoryunit #() memoryunit(
     .write_enable(memwrite),
     .DATAMEMControl(instr_funct3),
     .clk(clk_i),
-    .read_data(readdata)
+    .read_data(readdata),
+    .read_en(read_en)
 );
 
 controlUnit #() controlunit(
@@ -140,7 +143,8 @@ controlUnit #() controlunit(
     .ALUControl(alu_ctrl),
     .ALUSrc(alusrc),
     .ImmSrc(immsrc),
-    .MemWrite(memwrite)
+    .MemWrite(memwrite),
+    .read_en(read_en)
 );
 
 signextend #() signextend(

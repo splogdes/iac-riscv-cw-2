@@ -4,14 +4,15 @@ module memoryunit #(
     ADDRESS_WIDTH = 32, 
     MEMORY_SIZE = 14, 
     SOURCE_FILE = "datamemory.mem",
-    CACHE_SIZE = 8,
-    BLOCK_SIZE = 3
+    CACHE_SIZE = 2,
+    BLOCK_SIZE = 1
 ) (
     input logic     [ADDRESS_WIDTH-1:0] address,
     input logic     [DATA_WIDTH-1:0]    write_data,
     input logic     [2:0]               DATAMEMControl,
     input logic                         write_enable,
     input logic                         clk,
+    input logic                         read_en,
     output logic    [DATA_WIDTH-1:0]    read_data
 );
 
@@ -39,6 +40,7 @@ datacontroller #(DATA_WIDTH) data_controller1(
 
 cache #(DATA_WIDTH,ADDRESS_WIDTH-2,CACHE_SIZE,BLOCK_SIZE) cache1(
     .clk(clk),
+    .read_en(read_en),
     .address(address[ADDRESS_WIDTH-1:2]),
     .write_enable(write_enable),
     .mem_data_in(mem_read),
