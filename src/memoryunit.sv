@@ -4,8 +4,8 @@ module memoryunit #(
     ADDRESS_WIDTH = 32, 
     MEMORY_SIZE = 14, 
     SOURCE_FILE = "datamemory.mem",
-    CACHE_SIZE = 3,
-    BLOCK_SIZE = 2
+    CACHE_SIZE = 3, //Has to be >= 1  and is sized 2**CACHE_SIZE
+    BLOCK_SIZE = 2  //Block size has to be 1 or more the blocks are sized 2**BLOCK_SIZE
 ) (
     input logic     [ADDRESS_WIDTH-1:0] address,
     input logic     [DATA_WIDTH-1:0]    write_data,
