@@ -19,7 +19,7 @@ int main (int argc, char **argv, char **env) {
     top->write_enable = 1;
     int count = 0;
     int clk;
-    int i;
+    int i; 
 
     for (i=0; i<100;i++) {
         for (clk=0; clk<2; clk++) {
