@@ -12,6 +12,8 @@ parameter TAG_SIZE =  ADDRESS_WIDTH-CACHE_SIZE;
 
 parameter JUST_DATA = DATA_WIDTH*(2**BLOCK_SIZE);
 
+parameter S= 2**BLOCK_SIZE;
+
 parameter V = JUST_DATA+ADDRESS_WIDTH-CACHE_SIZE; //The V flag
 
 logic [ADDRESS_WIDTH-CACHE_SIZE-1:0] tag = address[ADDRESS_WIDTH-1:CACHE_SIZE]; //tag
@@ -20,7 +22,7 @@ logic [CACHE_SIZE-BLOCK_SIZE-1:0] set = address[CACHE_SIZE-1:BLOCK_SIZE]; //Whic
 
 logic [BLOCK_SIZE-1:0] way = address[BLOCK_SIZE-1:0]; //Which Block
 
-logic [JUST_DATA-1:0] block,write_data;
+logic [S-1:0][DATA_WIDTH-1:0] block,write_data;
 
 logic hit;
 
@@ -29,21 +31,16 @@ logic [V:0] cache_mem [2**(CACHE_SIZE-BLOCK_SIZE)-1:0];
 always_comb begin
     hit = (cache_mem[set][V]!=0'b0)&&(cache_mem[set][V-1:V-TAG_SIZE] == tag);
     block = 0;
-        if(write_enable) begin
-            if(hit) block = cache_mem[set][JUST_DATA-1:0];
-            else block = mem_data_in;
-        end
-        else if(read_en)begin
-            if(hit) block = cache_mem[set][JUST_DATA-1:0];
-            else block = mem_data_in;
-        end
+    if(write_enable) begin
+        if(hit) block = cache_mem[set][JUST_DATA-1:0];
+        else block = mem_data_in;
     end
-
-blockread #(DATA_WIDTH,BLOCK_SIZE) read1(
-    .block(block),
-    .way(way),
-    .d_out(d_out)
-);
+    else if(read_en)begin
+        if(hit) block = cache_mem[set][JUST_DATA-1:0];
+        else block = mem_data_in; 
+    end
+    d_out = block[way];
+end
 
 blockwrite #(DATA_WIDTH,BLOCK_SIZE) write1(
     .d_in(d_in),

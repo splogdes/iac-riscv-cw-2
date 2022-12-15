@@ -25,7 +25,7 @@ module datacontroller #(
             end
             {3'b010}: begin
                 read_data = mem_data_out; //lw
-                write_data =mem_data_in; //sw
+                write_data = mem_data_in; //sw
             end
             {3'b100}: read_data = {{24{1'b0}},mem_data_out[First_2]}; //lbu
             {3'b101}: read_data = {{16{1'b0}},mem_data_out[{First_2[1],1'b0}+:2]}; //lhu
