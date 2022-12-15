@@ -32,11 +32,9 @@ always_comb begin
     mem_address = 0;
     block = 0;
         if(write_enable) begin
+            mem_address = address;
             if(hit) block = cache_mem[set][JUST_DATA-1:0];
-            else begin
-                mem_address = address;
-                block = mem_data_in;
-            end
+            else block = mem_data_in;
         end
         else if(read_en)begin
             if(hit) block = cache_mem[set][JUST_DATA-1:0];

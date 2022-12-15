@@ -23,7 +23,7 @@ logic [ADDRESS_WIDTH-3:0] mem_address;
 
 datamemory #(DATA_WIDTH,ADDRESS_WIDTH-2,MEMORY_SIZE,BLOCK_SIZE,SOURCE_FILE) datamemory1(
     .address(mem_address),
-    .write_data(cache_in),
+    .write_data(cache_out),
     .write_enable(write_enable),
     .clk(clk),
     .read_data(mem_read)
