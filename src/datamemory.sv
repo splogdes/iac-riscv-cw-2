@@ -19,7 +19,7 @@ module datamemory #(
     always_comb begin 
         read_data = 0;
         for(int i=2**BLOCK_SIZE-1;i>=0;i--) begin
-            read_data[i] = data_mem[i];
+            read_data[i] = data_mem[{address[MEMORY_SIZE-1:BLOCK_SIZE],{i}[BLOCK_SIZE-1:0]}];
         end
     end
 
@@ -29,7 +29,7 @@ module datamemory #(
         $display("Done loading");
     end;
 
-    always_ff @(posedge clk)
+    always_ff @(negedge clk)
         begin
             if (write_enable == 1'b1) data_mem[{address}[MEMORY_SIZE-1:0]] <= write_data;
         end

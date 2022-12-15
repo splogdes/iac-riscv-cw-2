@@ -5,8 +5,7 @@ module cache #(
     input logic [DATA_WIDTH-1:0] d_in,
     input logic [JUST_DATA-1:0] mem_data_in,
     input logic clk, write_enable, read_en,
-    output logic [DATA_WIDTH-1:0] d_out,
-    output logic [ADDRESS_WIDTH-1:0] mem_address
+    output logic [DATA_WIDTH-1:0] d_out
 );
 
 parameter TAG_SIZE =  ADDRESS_WIDTH-CACHE_SIZE;
@@ -29,19 +28,14 @@ logic [V:0] cache_mem [2**(CACHE_SIZE-BLOCK_SIZE)-1:0];
 
 always_comb begin
     hit = (cache_mem[set][V]!=0'b0)&&(cache_mem[set][V-1:V-TAG_SIZE] == tag);
-    mem_address = 0;
     block = 0;
         if(write_enable) begin
-            mem_address = address;
             if(hit) block = cache_mem[set][JUST_DATA-1:0];
             else block = mem_data_in;
         end
         else if(read_en)begin
             if(hit) block = cache_mem[set][JUST_DATA-1:0];
-            else begin
-                mem_address = address;
-                block = mem_data_in;
-            end
+            else block = mem_data_in;
         end
     end
 
