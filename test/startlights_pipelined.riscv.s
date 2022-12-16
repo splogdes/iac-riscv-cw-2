@@ -46,7 +46,7 @@ srli a2, a2, 29
 nop
 nop
 nop
-addi a1, x0, 10 # count up cycle count
+addi a1, x0, 3 # count up cycle count
 nop
 nop
 nop
@@ -149,17 +149,10 @@ nop
 nop
 nop
 jal x0, end
-nop
-nop
-nop
 subroutine_wait_a1:
 nop
 nop
-nop
 addi x28, a1, 0
-nop
-nop
-nop
 dec_x28:
 nop
 nop
@@ -167,9 +160,7 @@ nop
 addi x28, x28, -1
 nop
 nop
-nop
 bne x28, x0, dec_x28
-nop
 nop
 nop
 ret
