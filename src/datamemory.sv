@@ -13,15 +13,18 @@ module datamemory #(
     output logic   [S-1:0][DATA_WIDTH-1:0]      read_data
 );
     parameter S = 2**BLOCK_SIZE;
+    logic [S-1:0][DATA_WIDTH-1:0] write_block;
 
-    logic [DATA_WIDTH-1:0] data_mem [2**MEMORY_SIZE-1:0];
+    logic [S-1:0][DATA_WIDTH-1:0] data_mem [2**(MEMORY_SIZE-BLOCK_SIZE)-1:0];
 
-    always_comb begin 
-        read_data = 0;
-        for(int i=2**BLOCK_SIZE-1;i>=0;i--) begin
-            read_data[i] = data_mem[{address[MEMORY_SIZE-1:BLOCK_SIZE],{i}[BLOCK_SIZE-1:0]}];
-        end
-    end
+    always_comb read_data = data_mem[address[MEMORY_SIZE-1:BLOCK_SIZE]];
+
+    blockwrite #(DATA_WIDTH,BLOCK_SIZE) writedatamem(
+        .d_in(write_data),
+        .block(read_data),
+        .way(address[BLOCK_SIZE-1:0]),
+        .block_out(write_block)
+    );
 
     initial begin
         $display("Loading Data Memory...");
@@ -29,9 +32,6 @@ module datamemory #(
         $display("Done loading");
     end;
 
-    always_ff @(negedge clk)
-        begin
-            if (write_enable == 1'b1) data_mem[{address}[MEMORY_SIZE-1:0]] <= write_data;
-        end
+    always_ff @(negedge clk) if (write_enable == 1) data_mem[{address}[MEMORY_SIZE-1:BLOCK_SIZE]] <= write_block;
 
 endmodule

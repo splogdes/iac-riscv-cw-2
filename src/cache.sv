@@ -42,7 +42,7 @@ always_comb begin
     d_out = block[way];
 end
 
-blockwrite #(DATA_WIDTH,BLOCK_SIZE) write1(
+blockwrite #(DATA_WIDTH,BLOCK_SIZE) writecache(
     .d_in(d_in),
     .block(block),
     .way(way),
