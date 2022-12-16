@@ -279,7 +279,7 @@ programcounter #() programcounter (
 
 instructionmemory #(BITNESS, INSTR_WIDTH, "instructionmemory.tmp.mem") instructionmemory (
     .addr_i(pc),
-    .dout_o(instr_read)
+    .data_o(instr_read)
 );
 
 alu #(BITNESS,3) alu (
