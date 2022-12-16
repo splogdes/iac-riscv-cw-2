@@ -122,7 +122,7 @@ regfile #(BITNESS, REG_ADDR_WIDTH) registerfile(
     .a0(a0)
 );
 
-memoryunit #(BITNESS,32,14,"datamemory.mem",8,2) memoryunit(
+memoryunit #(BITNESS,32,17,"triangle.mem",8,2) memoryunit(
     .address(aluresult),
     .write_data(regfile_d2),
     .write_enable(memwrite),
