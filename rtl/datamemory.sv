@@ -30,7 +30,7 @@ module datamemory #(
 
     initial begin
         $display("Loading Data Memory...");
-        file = $fopen({"./src/generated/",SOURCE_FILE},"r");
+        file = $fopen({"./rtl/generated/",SOURCE_FILE},"r");
         while (!$feof(file)) begin
             while((!$feof(file))||(i<S)) begin
                 $fgets(line,file);
