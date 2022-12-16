@@ -14,6 +14,8 @@ module datamemory #(
 );
     parameter S = 2**BLOCK_SIZE;
     logic [S-1:0][DATA_WIDTH-1:0] write_block;
+    int file,i;
+    string line;
 
     logic [S-1:0][DATA_WIDTH-1:0] data_mem [2**(MEMORY_SIZE-BLOCK_SIZE)-1:0];
 
@@ -28,7 +30,15 @@ module datamemory #(
 
     initial begin
         $display("Loading Data Memory...");
-        $readmemh({"./src/generated/",SOURCE_FILE}, data_mem);
+        file = $fopen({"./src/generated/",SOURCE_FILE},"r");
+        while (!$feof(file)) begin
+            while((!$feof(file))||(i<S)) begin
+                $fgets(line,file);
+                data_mem[{i}[MEMORY_SIZE-1:BLOCK_SIZE]][{i}[BLOCK_SIZE-1:0]] = line.atohex();
+                i++;
+            end
+            $fclose(file);
+        end
         $display("Done loading");
     end;
 
