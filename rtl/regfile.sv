@@ -6,15 +6,18 @@ module regfile #(
     input logic [ADR_WIDTH-1:0]a1,a2,a3,
     input logic [DATA_WIDTH-1:0]wd3,
     output logic [DATA_WIDTH-1:0]rd1,rd2,
-    output logic [DATA_WIDTH-1:0]a0
+    output logic [DATA_WIDTH-1:0]a0,
+    input logic int_i
 );
 
     logic [DATA_WIDTH-1:0] ram_array [2**ADR_WIDTH-1:0];
     initial ram_array[0] = 0;
 
     always_comb begin
-        rd1 = ram_array[a1];
-        rd2 = ram_array[a2];
+        if (a1 == 'h4) rd1 = {32{int_i}};
+        else rd1 = ram_array[a1];
+        if (a2 == 'h4) rd2 = {32{int_i}};
+        else rd2 = ram_array[a2];
         a0 = ram_array[10];
     end
 

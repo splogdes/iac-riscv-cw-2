@@ -93,12 +93,24 @@ logic [BITNESS-1:0] result;
 logic [BITNESS-1:0] a0;
 /* verilator lint_on UNUSED */
 
-logic [BITNESS-1:0] immext_d, immext_e;
+logic [BITNESS-1:0] immext_d, immext_e, immext_m, immext_w;
 
 cdl #(BITNESS) cdl_immext_d_e (
     .clk_i(clk_i),
     .signal_i(immext_d),
     .delayed_o(immext_e)
+);
+
+cdl #(BITNESS) cdl_immext_e_m (
+    .clk_i(clk_i),
+    .signal_i(immext_e),
+    .delayed_o(immext_m)
+);
+
+cdl #(BITNESS) cdl_immext_m_w (
+    .clk_i(clk_i),
+    .signal_i(immext_m),
+    .delayed_o(immext_w)
 );
 
 logic [2:0] alu_ctrl_d;
@@ -257,7 +269,7 @@ always_comb begin
     else if (resultsrc_w == 2'b10)
         result = pcplus4_w; //JAL/JALR return storage
     else if (resultsrc_w == 2'b11)
-        result = immext_e;
+        result = immext_w;
     else
         result = 'b1111111;//Shouldn't happen
 
@@ -299,7 +311,8 @@ regfile #(BITNESS, REG_ADDR_WIDTH) registerfile(
     .wd3(result),
     .rd1(rd1_d),
     .rd2(rd2_d),
-    .a0(a0)
+    .a0(a0),
+    .int_i(int_i)
 );
 
 datamemory #() datamemory(
