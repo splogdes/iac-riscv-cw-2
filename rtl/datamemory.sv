@@ -29,16 +29,6 @@ module datamemory #(
     initial begin
         $display("Loading Data Memory...");
         $readmemh({"./rtl/datamemory/",SOURCE_FILE},data_mem,'h1000);
-        // file = $fopen({"./rtl/datamemory/",SOURCE_FILE},"r");
-        // while (!$feof(file)) begin
-        //     while((!$feof(file))||(i<S)) begin
-        //         $fgets(line,file);
-        //         data_mem[{i}[MEMORY_SIZE-1:BLOCK_SIZE]][{i}[BLOCK_SIZE-1:0]] = line.atohex();
-        //         i++;
-        //     end
-        //     $fclose(file);
-        // end
-        //for(int i = 'h10000;i<'h10020;i++) $displayh("addr=%0h,mem=%0h",i,data_mem[i[MEMORY_SIZE+1:BLOCK_SIZE+2]][i[BLOCK_SIZE+1:2]][i[1:0]]);
         $display("Done loading");
     end;
 
