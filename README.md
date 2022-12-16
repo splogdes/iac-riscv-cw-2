@@ -1,5 +1,7 @@
-# note about pipelining: with 1 hour and 10 minutes left of the project I discovered that an earlier merge had broken quite a lot of functionality in the project: I had to replace the startlights program with startlights_pipelined which does not use srli as that was in the merge which broke things and I didn't have time to implement the lost features from scratch or sort out the merge. Consequently it manually sets a0 rather than shifting. That is also why I manually copied across vbuddy.cpp and the changes to riscv_tb.cpp from the other branch.
+## note about pipelining: with 1 hour and 10 minutes left of the project I discovered that an earlier merge had broken quite a lot of functionality in the project: I had to replace the startlights program with startlights_pipelined which does not use srli as that was in the merge which broke things and I didn't have time to implement the lost features from scratch or sort out the merge. Consequently it manually sets a0 rather than shifting. That is also why I manually copied across vbuddy.cpp and the changes to riscv_tb.cpp from the other branch.
 
+
+### Look in `test` for evidence of pipelined operation
 
 # iac-riscv-cw-2
 **Coursework for group 2, members Ollie Cosgrove, Patrick Beart, Noor Elsheikh and Jackson Barlow**
