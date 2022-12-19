@@ -122,7 +122,7 @@ regfile #(BITNESS, REG_ADDR_WIDTH) registerfile(
     .a0(a0)
 );
 
-memoryunit #(BITNESS,32,17,"datamemory.mem",8,2) memoryunit(
+memoryunit #(BITNESS,32,15,"noisy.mem",8,2) memoryunit(
     .address(aluresult),
     .write_data(regfile_d2),
     .write_enable(memwrite),
@@ -156,6 +156,7 @@ signextend #() signextend(
 final begin
     $display("Writing register dump...");
     $writememh("./rtl/generated/registerdump.tmp.mem", registerfile.ram_array);
+    $writememh("./rtl/datamemory/datamemdump.tmp.mem", memoryunit.datamemory1.data_mem,'h10,'h1F);
     $display("Done writing register dump");
 end;
 

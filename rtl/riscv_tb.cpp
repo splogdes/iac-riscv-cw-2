@@ -1,6 +1,7 @@
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 #include "Vriscv.h"
+#include "vbuddy.cpp"
 
 #include "lib/testutils.h"
 
@@ -15,7 +16,9 @@ int main(int argc, char **argv, char **env) {
   VerilatedVcdC* tfp = new VerilatedVcdC;
   top->trace (tfp, 99);
   tfp->open ("riscv.vcd");
- 
+  if (vbdOpen()!=1) return(-1);
+  vbdHeader("refrence");
+  vbdCycle(0);
   top->clk_i = 0;
   top->rst_i = 0;
   int count = 0;
@@ -34,15 +37,24 @@ int main(int argc, char **argv, char **env) {
   tfp->dump(count);
   count++;
 
-  while (count < 10000) {
+  while (top->data_out_o != 5) {
+    count++;
+    top->clk_i = !top->clk_i;
+    top->eval();
+  };
+  count =4;
+  while (count < 1)
+  {
+    vbdPlot(int(top->data_out_o), 0, 255);
+    vbdCycle(count-4);
     count++;
     top->clk_i = !top->clk_i;
     top->eval();
     tfp->dump(count);
-
-    if (Verilated::gotFinish()) exit(0);
-  };
-
+    if (Verilated::gotFinish()||vbdGetkey()=='q') exit(0);
+  }
+  
+  vbdClose();
   tfp->close();
   top->final();
   exit(0);

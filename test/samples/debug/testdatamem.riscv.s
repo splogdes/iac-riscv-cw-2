@@ -7,6 +7,10 @@ sb t1, 3(s0)
 sb t4, 0(s0)
 sb t2, 2(s0)
 sb t3, 1(s0)
+lbu a0, 0(s0)
+lbu a0, 1(s0)
+lbu a0, 2(s0)
+lbu a0, 3(s0)
 lw a0, 0(s0)
 addi s0, s0, 0x20
 li a1, 0x5678
