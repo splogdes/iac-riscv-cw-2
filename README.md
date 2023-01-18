@@ -20,7 +20,7 @@ Further [evidence](https://github.com/splogdes/iac-riscv-cw-2/blob/4c0a8b197b308
 
 
 ### Contributions:
-Ollie: Register file, reformatting data memory for integration with caching, instruction memory, register file, caching
+#### Ollie: Register file, reformatting data memory for integration with caching, instruction memory, register file, caching <- My Work
 
 Noor: Control unit and subnmodules, decoder, help on other modules
 
