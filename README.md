@@ -11,30 +11,18 @@ I made lots of mistakes along the way of inefficient data manipulation, wasting 
 I copied over my ALU and Regfile. These needed little changing. I added some more functionality to ALU for readability. I used enumeration and created there associated, for the tests I varied inputs in the upper limits and compared the output to expected values as this Is where I foresaw the most errors coming from.
 I added some error checking to the alu testbench for srl and sll as there where some problems with it.
 
-commit 8414a10cb26054be90d1389110ba2ea4eae8237c
-commit 93d05305d496d8812d99d7231dfaee655f1ab86a
-commit 439111ef06cb491ab934a4d199ea61ced59dce42
 ### Changing `datamemory.sv` and `datacontroller.sv`
 I added a parameter to limit the size of memory and remove the first two bits of address to `datamemory.sv` and changed the test bench.
 I added the byte and halve instructions, for this I worked out how much the data needed to be shifted by to get the wanted data in the first byte or halve. For write I swapped the data for data_in then shifted it back, then write to memory. For the reading and writing I did the same shift but outputted the first half of byte, I wrote some assembly to check this all worked checking the waveform.
 
-commit 86e12890a27c223a097ac1506256aedcb71135f1
-commit ea404681357108db1ff81441e495f8d11c33cb86
-
 ### Adding LUI
 For LUI I needed to add a new case to `signextend.sv` and some logic in the riscv and decoder sheets to decide what the input to the register are.
-
-commit ea404681357108db1ff81441e495f8d11c33cb86
 
 ### Making `memoryunit.sv` and related changes
 As a precursor to making `cache.sv` I split up the data memory into two sub modules the memory and a module to add byte addressability. I edited `datacontroller.sv` so instead of shifting, I do bit rotations this saved some lines of code this was done as I was trying to find a way to implement caching. `datamemory.sv` was made loadable.
 
-commit 0ed00e229b6d08d166cb4c56c632fb15be51c344
 ### Creating `olliesproposal.riscv.s`
 I implemented my own F1 code, however there were errors initially. The challenge was finding a good way of creating the output, to do this I had a counter that counts up to 8, then 1 is shifted left by this, the result is equivalent to 2^count then I subtract one from this to create the desired output. There is also a delay subroutine which counts down from a given number to add delay.
-
-commit a7d1de47eeda9754d6f88a2ecc116d98e655d188
-commit 92c32f95d0128074c758a3fa59b8dd4ff8d190a6
 
 ### Making `cache.sv ` and related changes
 
@@ -43,12 +31,3 @@ I encountered a problem where the data supplied to the data memory from the cach
 Later on I got rid of `blockread.sv`, the `blockwrite.sv` was useful though so that was kept
 Using the 2'D packed arrays approach I simplified `datacontroller.sv` from the bit rotators. 
 To get rid of the for loop as I saw it as suboptimal `datamemory.sv` was changed to storing blocks, and used the blockwrite module for writing to it. For reading data correctly from files I manipulate the data in, from the files, so it gets translated properly.
-
-commit 778232c3ce2d9a132ae6e5718f2bde762cc484de
-commit 5ea351476ddf0a0fe2bf9c0ca295565a72ee2886
-commit 5f3ac5f255e51ec1539e96a8a9f9fbb66c7115db
-commit 1016244715695996351f7f159e0fa920bc8ae43f
-commit 79b6c4100b935ba13ca05d63ecdc1c59d4b8af31
-
-
-
